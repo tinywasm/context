@@ -2,6 +2,4 @@ module github.com/tinywasm/context
 
 go 1.25.2
 
-require github.com/tinywasm/fmt v0.0.0
-
-replace github.com/tinywasm/fmt => ../fmt
+require github.com/tinywasm/fmt v0.14.0
