@@ -33,6 +33,17 @@ func WithValue(parent *Context, key, value string) (*Context, error) {
 	return ctx, nil
 }
 
+// Set adds or updates a key-value pair in-place.
+// Returns an error if the capacity of 16 pairs is exceeded.
+func (c *Context) Set(key, value string) error {
+	if c.count >= 16 {
+		return errCapacityExceeded
+	}
+	c.pairs[c.count] = fmt.KeyValue{Key: key, Value: value}
+	c.count++
+	return nil
+}
+
 // Value searches for the value associated with key (reverse search to prioritize latest values).
 func (c *Context) Value(key string) string {
 	if c == nil {

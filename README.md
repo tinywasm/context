@@ -8,6 +8,7 @@ Minimalist context library for TinyGo.
 ## Features
 
 - **No Maps**: Uses a fixed array of structs to avoid dynamic allocations.
+- **Mutable**: Supports in-place modification via `Set(key, value)`.
 - **Minimal Footprint**: Designed to keep binary size at a minimum.
 - **TinyGo Compatible**: Fully compatible with TinyGo and WASM environments.
 - **Fixed Capacity**: Maximum of 16 key-value pairs (prioritizes latest values).
@@ -27,7 +28,10 @@ import "github.com/tinywasm/context"
 ctx := context.Background()
 
 // Add values (Keys and Values must be strings)
-ctx, _ = context.WithValue(ctx, "user_id", "123")
+// In-place mutation (simpler for state machines):
+_ = ctx.Set("user_id", "123")
+
+// Nested creation (traditional style):
 ctx, _ = context.WithValue(ctx, "role", "admin")
 
 // Retrieve values

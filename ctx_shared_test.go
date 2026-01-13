@@ -73,4 +73,36 @@ func RunContextTests(t *testing.T) {
 			t.Errorf("expected errCapacityExceeded, got %v", err)
 		}
 	})
+
+	t.Run("MutableSet", func(t *testing.T) {
+		ctx := Background()
+		if err := ctx.Set("name", "bob"); err != nil {
+			t.Fatal(err)
+		}
+		if v := ctx.Value("name"); v != "bob" {
+			t.Errorf("expected 'bob', got '%s'", v)
+		}
+
+		// Verify it mutates the same pointer
+		if err := ctx.Set("job", "dev"); err != nil {
+			t.Fatal(err)
+		}
+		if v := ctx.Value("job"); v != "dev" {
+			t.Errorf("expected 'dev', got '%s'", v)
+		}
+		if v := ctx.Value("name"); v != "bob" {
+			t.Errorf("expected 'bob' still there, got '%s'", v)
+		}
+
+		// Test capacity with Set
+		ctx = Background()
+		for i := 0; i < 16; i++ {
+			if err := ctx.Set("k", "v"); err != nil {
+				t.Fatalf("unexpected error at index %d: %v", i, err)
+			}
+		}
+		if err := ctx.Set("k", "v"); err != errCapacityExceeded {
+			t.Errorf("expected errCapacityExceeded, got %v", err)
+		}
+	})
 }
