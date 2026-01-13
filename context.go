@@ -1,5 +1,7 @@
 package context
 
+import "errors"
+
 // Context is a minimalist context compatible with TinyGo.
 // No maps, no channels, uses a fixed array of 16 key-value pairs.
 type Context struct {
@@ -12,6 +14,9 @@ type pair struct {
 	value string
 }
 
+// ErrCapacityExceeded is returned when the context reaches its maximum capacity of 16 pairs.
+var ErrCapacityExceeded = errors.New("context: max 16 values exceeded")
+
 // Background returns an empty Context (equivalent to context.Background).
 func Background() *Context {
 	return &Context{}
@@ -23,19 +28,19 @@ func TODO() *Context {
 }
 
 // WithValue creates a new Context with the additional key-value pair.
-// Panics if the capacity of 16 pairs is exceeded.
-func WithValue(parent *Context, key, value string) *Context {
+// Returns ErrCapacityExceeded if the capacity of 16 pairs is exceeded.
+func WithValue(parent *Context, key, value string) (*Context, error) {
 	ctx := &Context{}
 	if parent != nil {
 		ctx.pairs = parent.pairs
 		ctx.count = parent.count
 	}
 	if ctx.count >= 16 {
-		panic("context: max 16 values exceeded")
+		return nil, ErrCapacityExceeded
 	}
 	ctx.pairs[ctx.count] = pair{key: key, value: value}
 	ctx.count++
-	return ctx
+	return ctx, nil
 }
 
 // Value searches for the value associated with key (reverse search to prioritize latest values).

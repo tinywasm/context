@@ -27,8 +27,8 @@ import "github.com/tinywasm/context"
 ctx := context.Background()
 
 // Add values (Keys and Values must be strings)
-ctx = context.WithValue(ctx, "user_id", "123")
-ctx = context.WithValue(ctx, "role", "admin")
+ctx, _ = context.WithValue(ctx, "user_id", "123")
+ctx, _ = context.WithValue(ctx, "role", "admin")
 
 // Retrieve values
 user := ctx.Value("user_id") // returns "123"
@@ -39,4 +39,4 @@ missing := ctx.Value("none") // returns ""
 ## Constraints
 
 - Keys and Values are restricted to `string` type for performance and simplicity.
-- Maximum capacity of **16** key-value pairs. Exceeding this will cause a `panic`.
+- Maximum capacity of **16** key-value pairs. Exceeding this will return an error.

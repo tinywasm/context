@@ -30,8 +30,15 @@ func RunContextTests(t *testing.T) {
 
 	t.Run("WithValueAndGet", func(t *testing.T) {
 		ctx := Background()
-		ctx = WithValue(ctx, "user", "alice")
-		ctx = WithValue(ctx, "role", "admin")
+		var err error
+		ctx, err = WithValue(ctx, "user", "alice")
+		if err != nil {
+			t.Fatal(err)
+		}
+		ctx, err = WithValue(ctx, "role", "admin")
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if v := ctx.Value("user"); v != "alice" {
 			t.Errorf("expected 'alice', got '%s'", v)
@@ -45,22 +52,32 @@ func RunContextTests(t *testing.T) {
 	})
 
 	t.Run("OverwriteValue", func(t *testing.T) {
-		ctx := WithValue(Background(), "key", "v1")
-		ctx = WithValue(ctx, "key", "v2")
+		ctx, err := WithValue(Background(), "key", "v1")
+		if err != nil {
+			t.Fatal(err)
+		}
+		ctx, err = WithValue(ctx, "key", "v2")
+		if err != nil {
+			t.Fatal(err)
+		}
 		if v := ctx.Value("key"); v != "v2" {
 			t.Errorf("expected 'v2', got '%s'", v)
 		}
 	})
 
 	t.Run("MaxCapacity", func(t *testing.T) {
-		defer func() {
-			if r := recover(); r == nil {
-				t.Error("expected panic on exceeding capacity")
-			}
-		}()
 		ctx := Background()
-		for i := 0; i < 17; i++ {
-			ctx = WithValue(ctx, "k", "v")
+		var err error
+		for i := 0; i < 16; i++ {
+			ctx, err = WithValue(ctx, "k", "v")
+			if err != nil {
+				t.Fatalf("unexpected error at index %d: %v", i, err)
+			}
+		}
+		// 17th should fail
+		_, err = WithValue(ctx, "k", "v")
+		if err != ErrCapacityExceeded {
+			t.Errorf("expected ErrCapacityExceeded, got %v", err)
 		}
 	})
 }
