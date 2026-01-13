@@ -1,9 +1,9 @@
 package context
 
 // Context is a minimalist context compatible with TinyGo.
-// No maps, no channels, uses a fixed array of 8 key-value pairs.
+// No maps, no channels, uses a fixed array of 16 key-value pairs.
 type Context struct {
-	pairs [8]pair
+	pairs [16]pair
 	count uint8
 }
 
@@ -23,15 +23,15 @@ func TODO() *Context {
 }
 
 // WithValue creates a new Context with the additional key-value pair.
-// Panics if the capacity of 8 pairs is exceeded.
+// Panics if the capacity of 16 pairs is exceeded.
 func WithValue(parent *Context, key, value string) *Context {
 	ctx := &Context{}
 	if parent != nil {
 		ctx.pairs = parent.pairs
 		ctx.count = parent.count
 	}
-	if ctx.count >= 8 {
-		panic("context: max 8 values exceeded")
+	if ctx.count >= 16 {
+		panic("context: max 16 values exceeded")
 	}
 	ctx.pairs[ctx.count] = pair{key: key, value: value}
 	ctx.count++

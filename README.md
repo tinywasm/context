@@ -10,7 +10,7 @@ Minimalist context library for TinyGo.
 - **No Maps**: Uses a fixed array of structs to avoid dynamic allocations.
 - **Minimal Footprint**: Designed to keep binary size at a minimum.
 - **TinyGo Compatible**: Fully compatible with TinyGo and WASM environments.
-- **Fixed Capacity**: Maximum of 8 key-value pairs (prioritizes latest values).
+- **Fixed Capacity**: Maximum of 16 key-value pairs (prioritizes latest values).
 
 ## Installation
 
@@ -39,4 +39,4 @@ missing := ctx.Value("none") // returns ""
 ## Constraints
 
 - Keys and Values are restricted to `string` type for performance and simplicity.
-- Maximum capacity of **8** key-value pairs. Exceeding this will cause a `panic`.
+- Maximum capacity of **16** key-value pairs. Exceeding this will cause a `panic`.
