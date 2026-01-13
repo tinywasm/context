@@ -59,7 +59,7 @@ func RunContextTests(t *testing.T) {
 			}
 		}()
 		ctx := Background()
-		for i := 0; i < 9; i++ {
+		for i := 0; i < 17; i++ {
 			ctx = WithValue(ctx, "k", "v")
 		}
 	})
