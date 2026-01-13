@@ -39,4 +39,4 @@ missing := ctx.Value("none") // returns ""
 ## Constraints
 
 - Keys and Values are restricted to `string` type for performance and simplicity.
-- Maximum capacity of **16** key-value pairs. Exceeding this will return an error.
+- Maximum capacity of **16** key-value pairs. Exceeding this will return an error (see `fmt` error pattern).

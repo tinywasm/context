@@ -14,13 +14,6 @@ func RunContextTests(t *testing.T) {
 		}
 	})
 
-	t.Run("TODO", func(t *testing.T) {
-		ctx := TODO()
-		if ctx == nil {
-			t.Fatal("TODO() returned nil")
-		}
-	})
-
 	t.Run("NilReceiver", func(t *testing.T) {
 		var ctx *Context
 		if v := ctx.Value("key"); v != "" {
@@ -76,8 +69,8 @@ func RunContextTests(t *testing.T) {
 		}
 		// 17th should fail
 		_, err = WithValue(ctx, "k", "v")
-		if err != ErrCapacityExceeded {
-			t.Errorf("expected ErrCapacityExceeded, got %v", err)
+		if err != errCapacityExceeded {
+			t.Errorf("expected errCapacityExceeded, got %v", err)
 		}
 	})
 }

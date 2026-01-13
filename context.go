@@ -1,34 +1,24 @@
 package context
 
-import "errors"
+import "github.com/tinywasm/fmt"
 
 // Context is a minimalist context compatible with TinyGo.
 // No maps, no channels, uses a fixed array of 16 key-value pairs.
 type Context struct {
-	pairs [16]pair
+	pairs [16]fmt.KeyValue
 	count uint8
 }
 
-type pair struct {
-	key   string
-	value string
-}
-
-// ErrCapacityExceeded is returned when the context reaches its maximum capacity of 16 pairs.
-var ErrCapacityExceeded = errors.New("context: max 16 values exceeded")
+// errCapacityExceeded is returned when the context reaches its maximum capacity of 16 pairs.
+var errCapacityExceeded = fmt.Err("context: max 16 values exceeded")
 
 // Background returns an empty Context (equivalent to context.Background).
 func Background() *Context {
 	return &Context{}
 }
 
-// TODO returns an empty Context (equivalent to context.TODO).
-func TODO() *Context {
-	return Background()
-}
-
 // WithValue creates a new Context with the additional key-value pair.
-// Returns ErrCapacityExceeded if the capacity of 16 pairs is exceeded.
+// Returns errCapacityExceeded if the capacity of 16 pairs is exceeded.
 func WithValue(parent *Context, key, value string) (*Context, error) {
 	ctx := &Context{}
 	if parent != nil {
@@ -36,9 +26,9 @@ func WithValue(parent *Context, key, value string) (*Context, error) {
 		ctx.count = parent.count
 	}
 	if ctx.count >= 16 {
-		return nil, ErrCapacityExceeded
+		return nil, errCapacityExceeded
 	}
-	ctx.pairs[ctx.count] = pair{key: key, value: value}
+	ctx.pairs[ctx.count] = fmt.KeyValue{Key: key, Value: value}
 	ctx.count++
 	return ctx, nil
 }
@@ -49,8 +39,8 @@ func (c *Context) Value(key string) string {
 		return ""
 	}
 	for i := int(c.count) - 1; i >= 0; i-- {
-		if c.pairs[i].key == key {
-			return c.pairs[i].value
+		if c.pairs[i].Key == key {
+			return c.pairs[i].Value
 		}
 	}
 	return ""
