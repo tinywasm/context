@@ -56,3 +56,16 @@ func (c *Context) Value(key string) string {
 	}
 	return ""
 }
+
+// Keys returns a slice containing all unique keys in the context.
+// Later values with duplicate keys are not deduplicated - all keys are returned.
+func (c *Context) Keys() []string {
+	if c == nil || c.count == 0 {
+		return nil
+	}
+	keys := make([]string, c.count)
+	for i := uint8(0); i < c.count; i++ {
+		keys[i] = c.pairs[i].Key
+	}
+	return keys
+}

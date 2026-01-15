@@ -105,4 +105,22 @@ func RunContextTests(t *testing.T) {
 			t.Errorf("expected errCapacityExceeded, got %v", err)
 		}
 	})
+
+	t.Run("Keys", func(t *testing.T) {
+		ctx := Background()
+		_ = ctx.Set("k1", "v1")
+		_ = ctx.Set("k2", "v2")
+		_ = ctx.Set("k1", "v3") // Duplicate key
+
+		keys := ctx.Keys()
+		if len(keys) != 3 {
+			t.Errorf("expected 3 keys, got %d", len(keys))
+		}
+		expected := []string{"k1", "k2", "k1"}
+		for i, k := range keys {
+			if k != expected[i] {
+				t.Errorf("expected key %d to be %s, got %s", i, expected[i], k)
+			}
+		}
+	})
 }
