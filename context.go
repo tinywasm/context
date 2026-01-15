@@ -57,7 +57,7 @@ func (c *Context) Value(key string) string {
 	return ""
 }
 
-// Keys returns a slice containing all unique keys in the context.
+// Keys returns a slice containing all keys in the context.
 // Later values with duplicate keys are not deduplicated - all keys are returned.
 func (c *Context) Keys() []string {
 	if c == nil || c.count == 0 {
