@@ -38,6 +38,9 @@ ctx, _ = context.WithValue(ctx, "role", "admin")
 user := ctx.Value("user_id") // returns "123"
 role := ctx.Value("role")    // returns "admin"
 missing := ctx.Value("none") // returns ""
+
+// Inspect keys
+keys := ctx.Keys()           // returns []string{"user_id", "role"}
 ```
 
 ## Constraints
