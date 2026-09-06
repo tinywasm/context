@@ -1,6 +1,6 @@
 package context
 
-import "github.com/tinywasm/fmt"
+import "webtyp.com/fmt"
 
 // Context is a minimalist context compatible with TinyGo.
 // No maps, no channels, uses a fixed array of 16 key-value pairs.

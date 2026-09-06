@@ -2,15 +2,15 @@
 
 ## Context
 
-The `tinywasm/context` package currently exposes only a custom WASM-optimized `*Context` struct
-that is incompatible with the stdlib `context.Context` interface. Libraries like `tinywasm/agent`
+The `webtyp/context` package currently exposes only a custom WASM-optimized `*Context` struct
+that is incompatible with the stdlib `context.Context` interface. Libraries like `webtyp/agent`
 that use SQLite and `net/http` require stdlib `context.Context` on the backend. This plan adds a
 dual build-tag implementation so that:
 
 - **Backend (`!wasm`):** `Context` IS `context.Context` (type alias) — zero overhead, full stdlib compatibility.
 - **WASM (`wasm`):** `Context` is `*tinyCtx` (renamed from `*Context`) which satisfies the `context.Context` interface — minimalist, no channels, no maps.
 
-This makes `tinywasm/context` a true isomorphic drop-in for stdlib `context`.
+This makes `webtyp/context` a true isomorphic drop-in for stdlib `context`.
 
 ---
 
@@ -106,7 +106,7 @@ package context
 import (
 	"time"
 
-	"github.com/tinywasm/fmt"
+	"webtyp.com/fmt"
 )
 
 // tinyCtx is the minimalist WASM context.
@@ -148,7 +148,7 @@ func (c *tinyCtx) Value(key any) any {
 	return nil
 }
 
-// --- tinywasm-specific string API ---
+// --- webtyp-specific string API ---
 
 // Get retrieves the string value for key (reverse search, prioritizes latest entry).
 // Renamed from the old Value(key string) string method for compatibility with
@@ -300,11 +300,11 @@ func TestWASM_GetReplaceValue(t *testing.T) {
 ## Verification
 
 ```bash
-cd /home/cesar/Dev/Pkg/tinywasm/context && gotest .
+cd /home/cesar/Dev/Pkg/webtyp/context && gotest .
 ```
 
 All tests must pass. Then publish:
 
 ```bash
-cd /home/cesar/Dev/Pkg/tinywasm/context && gopush
+cd /home/cesar/Dev/Pkg/webtyp/context && gopush
 ```

@@ -1,4 +1,4 @@
-# tinywasm/context
+# webtyp/context
 <img src="docs/img/badges.svg">
 
 Minimalist context library for TinyGo.
@@ -14,13 +14,13 @@ Minimalist context library for TinyGo.
 ## Installation
 
 ```bash
-go get github.com/tinywasm/context
+go get webtyp.com/context
 ```
 
 ## Usage
 
 ```go
-import "github.com/tinywasm/context"
+import "webtyp.com/context"
 
 // Create background context
 ctx := context.Background()
